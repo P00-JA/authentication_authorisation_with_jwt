@@ -2,7 +2,6 @@ const jwt = require('jsonwebtoken');
 require('dotenv').config();
 const JWTController = {
   createToken(payload,refresh = false){
-    console.log("process",process.env.SECRET)
     const accessToken = jwt.sign(payload, process.env.SECRET, { 
       expiresIn: 60*60 
     });
@@ -40,21 +39,16 @@ const JWTController = {
   grantNewAccessToken(req,res){
     const cookieParser = (cookieName,cookies)=>{
       const cookieArr = cookies.split("; ");
-      console.log(cookieArr);
       let requiredCookie = cookieArr.filter(cookie=> cookie.indexOf(cookieName)==0)[0];
-      console.log(requiredCookie);
       let ourCookie = requiredCookie.split('=')[1];
-      console.log(ourCookie);
       return ourCookie;
     }
     let token = cookieParser("refresh_token",req.headers.cookie);
     let decoded = this.verifyToken(token);
-    console.log(decoded);
     if(!decoded){
       res.status(404).json({message:"invalid token"});
     }else{
        let newToken = this.createToken({email:decoded.email},false);
-       console.log(newToken);
        res.json({access_token : newToken.access_token})
     }
   }
