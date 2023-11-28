@@ -1,11 +1,13 @@
 const express = require('express');
 const sequelize = require('./config/database');
+const UserData = require('./models/UserData');
 const Team = require('./models/Team');
 const Project = require('./models/Project');
 const validateUser = require('./validators/registerValidator');
 const HomeController = require('./controllers/HomeController');
 const validateUserLogin = require('./validators/loginValidator');
 const updateUserValidator = require('./validators/updateUserValidator');
+const JWTController = require('./controllers/JWTController');
 
 const app = express();
 
@@ -15,13 +17,13 @@ Team.hasMany(Project, {
     allowNull: true
   }
 });
-/* Team.hasMany(UserData, {
+Team.hasMany(UserData, {
   foreignKey: {
     name: 'team_id',
     allowNull: true
   }
 });
- */
+
 app.use(express.json());
 
 app.get('/', (req, res) => {
@@ -47,13 +49,16 @@ app.post('/register', validateUser,HomeController.register);
 app.post('/user-login',validateUserLogin,HomeController.login);
 
 //put request to update user
-app.put('/user/:id',updateUserValidator,HomeController.updateUser);
+app.put('/user/:id',JWTController.verifyAccessToken.bind(JWTController),updateUserValidator,HomeController.updateUser);
 
 //user get request by id
-app.get('/user/:id',HomeController.getUser);
+app.get('/user/:id',JWTController.verifyAccessToken.bind(JWTController),HomeController.getUser);
 
 //delete user
-app.delete('/user/:id',HomeController.deleteUser);
+app.delete('/user/:id',JWTController.verifyAccessToken.bind(JWTController),HomeController.deleteUser);
+
+//get new access token
+app.get('/new-access-token',JWTController.grantNewAccessToken.bind(JWTController));
 
 const PORT = 3700;
 app.listen(PORT, () => {
