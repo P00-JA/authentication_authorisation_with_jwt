@@ -1,4 +1,4 @@
-const { where } = require('sequelize');
+const { where, DATE } = require('sequelize');
 const UserData = require('../models/UserData');
 const bcrypt = require('bcrypt');
 const JWTController = require('./JWTController');
@@ -18,12 +18,6 @@ const HomeController = {
             password: hashPassword,
             team_id:req.body.team_id,
           });
-          const token = JWTController.createToken({email:user.email},true);
-          res.cookie("refresh_token",token.refresh_token,{
-            expires : new Date(Date.now()+(24*60*60)),
-            httpOnly: true,
-          });
-
           res.json({'UserData' : user});
         } catch (error) {
           console.error('Error registering user:', error);
@@ -37,9 +31,10 @@ const HomeController = {
               return res.status(409).json({ errors: { message: "Please register" } });
             }
             if(bcrypt.compareSync(req.body.password,user.password)){
+
               const token = JWTController.createToken({email:user.email},true);
               res.cookie("refresh_token",token.refresh_token,{
-                expires : new Date(Date.now()+(24*60*60)),
+                expires : new Date(Date.now() + 30 * 20 * 60 *60),
                 httpOnly: true,
               });
                 res.json({'UserData' : {
