@@ -1,8 +1,5 @@
 const express = require('express');
 const sequelize = require('./config/database');
-const UserData = require('./models/UserData');
-const Team = require('./models/Team');
-const Project = require('./models/Project');
 const validateUser = require('./validators/registerValidator');
 const HomeController = require('./controllers/HomeController');
 const validateUserLogin = require('./validators/loginValidator');
@@ -10,19 +7,6 @@ const updateUserValidator = require('./validators/updateUserValidator');
 const JWTController = require('./controllers/JWTController');
 
 const app = express();
-
-// Define associations between models
-Team.hasMany(Project, {
-  foreignKey: {
-    allowNull: true
-  }
-});
-Team.hasMany(UserData, {
-  foreignKey: {
-    name: 'team_id',
-    allowNull: true
-  }
-});
 
 app.use(express.json());
 

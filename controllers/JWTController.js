@@ -7,7 +7,10 @@ const JWTController = {
     });
     return {
       access_token: accessToken,
-      refresh_token: refresh? jwt.sign(payload, process.env.SECRET, {expiresIn: 30 * 24 * 60 * 60}): null,
+      refresh_token: refresh? jwt.sign(payload, process.env.SECRET, {
+            expiresIn: 30 * 24 * 60 * 60,
+          })
+        : null,
     };
   },
 

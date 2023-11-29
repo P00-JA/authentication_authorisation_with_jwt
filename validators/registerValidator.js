@@ -1,4 +1,4 @@
-const { body, validationResult } = require('express-validator');
+const { body, validationResult } = require("express-validator");
 // Validation middleware function
 const validateUser = [
   body("firstName").isString().isLength({ min: 3 }).not().isEmpty(),
@@ -16,7 +16,7 @@ const validateUser = [
       return res.status(400).json({ errors: errors.array() });
     }
     next();
-  }
+  },
 ];
 
 module.exports = validateUser;
