@@ -36,9 +36,12 @@ const HomeController = {
       }
       if (bcrypt.compareSync(req.body.password, user.password)) {
         const token = JWTController.createToken({ email: user.email }, true);
+        console.log(token);
         res.cookie("refresh_token", token.refresh_token, {
           expires: new Date(Date.now() + 30 * 20 * 60 * 60),
           httpOnly: true,
+          sameSite: 'strict',
+          secure:true
         });
         res.json({
           UserData: {

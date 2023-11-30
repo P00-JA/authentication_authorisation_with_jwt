@@ -29,6 +29,7 @@ const JWTController = {
       res.status(405).json({ message: "token not provided" });
     }
     const token = headers["authorization"].split(" ")[1];
+    console.log(headers["authorization"].split(' '));
     console.log(token);
     if (!this.verifyToken(token)) {
       res.status(405).json({ message: "invalid token" });
