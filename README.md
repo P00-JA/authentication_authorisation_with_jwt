@@ -1,2 +1,2 @@
 # authentication_authorisation_with_jwt
-Authentication Authorisation mechanism, JWT tokens , how access and refresh tokens handle .
+Authentication Authorisation mechanism, JWT tokens , access and refresh tokens handle .
